@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 /**
  * 사이트 설정 로드 및 조회
+ * resource 폴더에 있는 설정 파일 가져오기
  */
 public class AppConfig {
     private final static ResourceBundle bundle;
@@ -16,7 +17,7 @@ public class AppConfig {
         String mode = System.getenv("mode");
         mode = mode == null || mode.isBlank() ? "":"-" + mode;
 
-        bundle = ResourceBundle.getBundle("application" + mode);
+        bundle = ResourceBundle.getBundle("application" + mode); //해당 모드의 application 파일 로드
         configs = new HashMap<>();
         Iterator<String> iter = bundle.getKeys().asIterator();
         while(iter.hasNext()) {
