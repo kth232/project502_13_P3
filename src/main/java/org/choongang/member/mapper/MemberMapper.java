@@ -1,4 +1,4 @@
 package org.choongang.member.mapper;
 
-public interface MamberMapper {
+public interface MemberMapper {
 }

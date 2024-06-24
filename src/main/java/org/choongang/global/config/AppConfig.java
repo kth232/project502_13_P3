@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 
 /**
  * 사이트 설정 로드 및 조회
- *
  */
 public class AppConfig {
     private final static ResourceBundle bundle;
