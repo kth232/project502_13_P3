@@ -4,10 +4,13 @@ import org.choongang.global.config.annotations.Controller;
 import org.choongang.global.config.annotations.GetMapping;
 import org.choongang.global.config.annotations.PostMapping;
 import org.choongang.global.config.annotations.RequestMapping;
+import org.choongang.member.services.JoinService;
 
 @Controller
 @RequestMapping("/member")
+@RequeiredArgsConstructor
 public class MemberController {
+    private final JoinService joinService;
 
     //회원가입 양식
     @GetMapping("/join")
@@ -17,7 +20,8 @@ public class MemberController {
 
     //회원가입 처리
     @PostMapping("/join")
-    public String joinPs() {
+    public String joinPs(RequestJoin form) {
+        joinService.process(form);
         return null;
     }
 
@@ -29,7 +33,7 @@ public class MemberController {
 
     //로그인 처리
     @PostMapping("/login")
-    public String loginPs() {
+    public String loginPs(RequestLogin form) {
         return null;
     }
 }

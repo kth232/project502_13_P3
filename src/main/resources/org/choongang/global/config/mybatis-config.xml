@@ -12,6 +12,10 @@
         <property name="prodUsername" value="PROJECT3" />
         <property name="prodPassword" value="oracle" />
     </properties>
+    <typeHandlers>
+        <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.choongang.member.constants.UserType" />
+        <!--우리가 추가해준 enum은 직접 핸들러를 작성해 주어야 함-->
+    </typeHandlers>
     <environments default="dev">
         <environment id="dev">
             <transactionManager type="JDBC"/>
