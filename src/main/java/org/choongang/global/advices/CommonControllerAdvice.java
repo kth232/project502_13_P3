@@ -33,8 +33,8 @@ public class CommonControllerAdvice {
             if (e instanceof AlertException) {
                 sb.append(String.format("alert('%s');", e.getMessage()));
             }
-            if (e instanceof AlertBackException) {
-                String target = ((AlertBackException) e).getTarget();
+            if (e instanceof AlertBackException alertBackException) {
+                String target = alertBackException.getTarget();
                 sb.append(String.format("%s.history.back();", target));
             }
             if (e instanceof AlertRedirectException alertRedirectException) {

@@ -1,5 +1,6 @@
 package org.choongang.member.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.choongang.global.config.annotations.Controller;
 import org.choongang.global.config.annotations.GetMapping;
 import org.choongang.global.config.annotations.PostMapping;
@@ -8,7 +9,7 @@ import org.choongang.member.services.JoinService;
 
 @Controller
 @RequestMapping("/member")
-@RequeiredArgsConstructor
+@RequiredArgsConstructor
 public class MemberController {
     private final JoinService joinService;
 
@@ -22,7 +23,7 @@ public class MemberController {
     @PostMapping("/join")
     public String joinPs(RequestJoin form) {
         joinService.process(form);
-        return null;
+        return "member/join";
     }
 
     //로그인 양식
