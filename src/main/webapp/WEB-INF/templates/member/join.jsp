@@ -49,7 +49,7 @@
                 <div class="termsContent">약관 내용..</div>
                 <input type="checkbox" name="termsAgree" value="true" id="termsAgree">
                 <label for="termsAgree">
-                    <fmt:message key="약관에_동의합니다." />
+                    <fmt:message key="약관에_동의합니다" />
                 </label>
             </div>
             <div class="button-group">
