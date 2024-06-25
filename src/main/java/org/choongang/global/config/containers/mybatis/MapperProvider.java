@@ -8,11 +8,11 @@ import java.util.Arrays;
 @MapperScan({"org.choongang.member.mapper"})
 public class MapperProvider {
 
-    public static MapperProvider instance;
+    public static MapperProvider instance; //인스턴스 객체 생성
 
-    private MapperProvider() {}
+    private MapperProvider() {} //기본 생성자
 
-    public static MapperProvider getInstance() {
+    public static MapperProvider getInstance() { //싱글톤 패턴
         if (instance == null) {
             instance = new MapperProvider();
         }

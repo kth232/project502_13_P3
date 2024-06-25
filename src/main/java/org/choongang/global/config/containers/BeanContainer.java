@@ -16,10 +16,10 @@ import java.util.List;
 import java.util.Map;
 
 public class BeanContainer {
-    //객체 관리, 의존성 주입 역할
-    private static BeanContainer instance;
+    //beanContainer: 객체 관리, 의존성 주입 역할
+    private static BeanContainer instance; //인스턴스 객체 생성
 
-    private Map<String, Object> beans;
+    private Map<String, Object> beans; //map 형태의 beans 객체 생성
 
     private MapperProvider mapperProvider; //마이바티스 매퍼 조회
 
@@ -36,7 +36,7 @@ public class BeanContainer {
             List<Class> classNames = getClassNames(rootPath, packageName);
 
             for (Class clazz : classNames) {
-                // 인터페이스는 동적 객체 생성을 하지 않으므로 건너띄기
+                // 인터페이스는 동적 객체 생성을 하지 않으므로 건너뛰기
                 if (clazz.isInterface()) {
                     continue;
                 }
@@ -73,8 +73,8 @@ public class BeanContainer {
                 }
                 // 컨테이너가 관리할 객체라면 생성자 매개변수의 의존성을 체크하고 의존성이 있다면 해당 객체를 생성하고 의존성을 해결한다.
                 if (isBean) {
-                    Constructor con = clazz.getDeclaredConstructors()[0]; //1개만 정의하도록 제한, 생성자가 2개면 어떤 건지 특정할 수 없기 때문
-                    List<Object> objs = resolveDependencies(key, con); //의존성의 의존성의 의존성인 경우
+                    Constructor con = clazz.getDeclaredConstructors()[0]; //생성자는 1개만 정의하도록 제한, 생성자가 2개면 어떤 건지 특정할 수 없기 때문
+                    List<Object> objs = resolveDependencies(key, con); //의존성의 의존성의 의존성인 경우 재귀함수로 의존성 객체 모두 생성
                     if (!beans.containsKey(key)) { //이미 해결된 의존성이 있다면 생성하지 않고 추가(싱글톤 패턴)
                         Object obj = con.getParameterTypes().length == 0 ? con.newInstance() : con.newInstance(objs.toArray());
                         beans.put(key, obj);
@@ -82,8 +82,6 @@ public class BeanContainer {
                 }
 
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +153,7 @@ public class BeanContainer {
 
                 Object obj = beans.get(clazz.getName());
                 if (obj == null) { //존재하지 않을 때 만들어줌
-                    Constructor _con = clazz.getDeclaredConstructors()[0];
+                    Constructor _con = clazz.getDeclaredConstructors()[0]; //모든 생성자 함수 가져옴
 
                     if (_con.getParameterTypes().length == 0) {
                         obj = _con.newInstance();
@@ -168,7 +166,6 @@ public class BeanContainer {
             }
         }
 
-
         return dependencies;
     }
 
@@ -178,8 +175,8 @@ public class BeanContainer {
         for (File file : files) {
             String path = file.getAbsolutePath();
             String className = packageName + "." + path.replace(rootPath + File.separator, "").replace(".class", "").replace(File.separator, ".");
-            try {
-                Class cls = Class.forName(className); //파일 경로를 가지고 클래스 객체 생성
+            try { //file.separator 경로 구분
+                Class cls = Class.forName(className); //파일 경로를 통해 가져온 클래스 이름의 객체 생성
                 classes.add(cls);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -196,7 +193,7 @@ public class BeanContainer {
         for (File file : files) {
             if (file.isDirectory()) {
                 List<File> _files = getFiles(file.getAbsolutePath());
-                if (!_files.isEmpty()) items.addAll(_files);
+                if (!_files.isEmpty()) items.addAll(_files); //파일이 비어있지 않으면 리스트 컬렉션에 추가
             } else {
                 items.add(file);
             }
@@ -221,14 +218,13 @@ public class BeanContainer {
         }
 
         Class clazz = bean.getClass();
-        Field[] fields = clazz.getDeclaredFields();
+        Field[] fields = clazz.getDeclaredFields(); //클래스의 모든 필드 가져오기
         for (Field field : fields) {
-            Class clz = field.getType();
+            Class clz = field.getType(); //필드의 타입 가져오기
             try {
 
                 /**
                  * 필드가 마이바티스 매퍼 또는 서블릿 기본 객체(HttpServletRequest, HttpServletResponse, HttpSession) 이라면 갱신
-                 *
                  */
 
                 Object mapper = mapperProvider.getMapper(clz);
