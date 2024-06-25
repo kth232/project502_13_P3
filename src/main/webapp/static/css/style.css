@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
 /*
 공통 스타일 정의! 특정 화면에 스타일 적용이 필요하다면 별도 파일에 정의할 것!
+common.tag에 적용되는 스타일
 태그 기본 스타일 초기화
 경계선 기준 맞춤=box
 */
