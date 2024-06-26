@@ -14,7 +14,7 @@ public class DBConn {
     static {
         try {
             String mode = System.getenv("mode"); //환경변수 mode
-            mode = mode == null || !mode.equals("prod") ? "dev":"prod";
+            mode = mode == null || !mode.equals("prod") ? "dev":"prod"; //prov는 예비용 환경 변수, dev가 안될 경우 prov 사용할 수 있도록 함
 
             Reader reader = Resources.getResourceAsReader("org/choongang/global/config/mybatis-config.xml");
             factory = new SqlSessionFactoryBuilder().build(reader, mode);
