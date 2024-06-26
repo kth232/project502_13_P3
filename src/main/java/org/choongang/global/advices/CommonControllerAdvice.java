@@ -38,16 +38,19 @@ public class CommonControllerAdvice {
                 sb.append(String.format("%s.history.back();", target));
             }
             if (e instanceof AlertRedirectException alertRedirectException) {
-                String target = alertRedirectException.getTarget();
+                String target = alertRedirectException.getTarget(); //타겟과 url 바꿈
                 String url = alertRedirectException.getRedirectUrl();
 
                 sb.append(String.format("%s.location.replace('%s');", target, url));
             }
 
             if (!sb.isEmpty()){
-                request.setAttribute("script", sb.toString());
+                request.setAttribute("script", sb.toString()); //스크립트 내에서 실행
                 return "commons/execute_script";
             }
+        } else {
+            //commonException으로 정의한 예외가 아닌 경우-응답코드 500
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return "errors/error";
     }

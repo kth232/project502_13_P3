@@ -35,7 +35,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
     }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response, List<Object> data) { //컨트롤러와 매개변수 주입->동적 실행(reflect API)
+    public void execute(HttpServletRequest request, HttpServletResponse response, List<Object> data) throws Exception{ //컨트롤러와 매개변수 주입->동적 실행(reflect API)
 
         Object controller = data.get(0); // 컨트롤러 객체
         Method method = (Method)data.get(1); // 찾은 요청 메서드
@@ -91,7 +91,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         /* 메서드 매개변수 의존성 주입 처리 S */
         List<Object> args = new ArrayList<>();
         for (Parameter param : method.getParameters()) {
-            try {
+
                 Class cls = param.getType();
                 String paramValue = null;
                 for (Annotation pa : param.getDeclaredAnnotations()) {
@@ -155,14 +155,10 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                     }
                     args.add(paramObj);
                 } // endif
-            } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-            }
         }
         /* 메서드 매개변수 의존성 주입 처리 E */
 
         /* 요청 메서드 호출 S */
-        try {
             // controller 적용 범위  Advice 처리
             handlerControllerAdvice.handle(controller);
 
@@ -187,9 +183,6 @@ public class HandlerAdapterImpl implements HandlerAdapter {
             RequestDispatcher rd = request.getRequestDispatcher(tpl);
             rd.forward(request, response);
 
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage()); //처리되지 않은 예외는 500 코드
-        }
         /* 요청 메서드 호출 E */
     }
 

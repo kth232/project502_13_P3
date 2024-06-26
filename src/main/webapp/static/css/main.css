@@ -1,6 +1,6 @@
 /* 메인 레이아웃 공통 */
 .layout-width {
-    min-width: 1100px;
+    min-width: 800px;
     max-width: 1300px;
     margin: 0 auto;
 }
@@ -37,7 +37,7 @@ header .site-top > .inner {
 }
 
 header .site-top i {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     vertical-align: middle;
 }
 
@@ -64,6 +64,7 @@ header img {
 header .logo-search > .inner {
     display: flex;
     justify-content: space-between;
+    flex-grow: 1;
     align-items: center;
 }
 
@@ -94,31 +95,47 @@ header .search-box button i {
 }
 
 nav {
-    background: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #FFE400;
 }
 
 nav > .inner {
     display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
     height: 45px;
 }
 
 nav > .inner a {
     font-size: 1.35rem;
-    color: #fff;
+    color: #000;
     padding: 0 25px;
     line-height: 45px;
 }
 
 nav > .inner a:hover {
-    background: #414141;
+    background: #808080;
 }
 /* 사이트 헤더 영역 E */
+
+main img {
+
+}
 
 /* 사이트 푸터 영역 S */
 footer {
     margin-top: 100px;
-    min-height: 250px;
-    background: #f8f8f8;
+    min-height: 150px;
+    background: #000;
     border-top: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+}
+
+footer .bottom-bar {
+    color: white;
+
 }
 /* 사이트 푸터 영역 E */
