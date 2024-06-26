@@ -45,8 +45,17 @@ public class MemberController {
 
     //로그인 처리
     @PostMapping("/login")
-    public String loginPs(RequestLogin form) {
+    public String loginPs(RequestLogin form, HttpServletRequest request) {
         loginService.process(form);
+
+        String redirectUrl = form.getRedirectUrl();
+        redirectUrl = redirectUrl == null || redirectUrl.isBlank() ? "/" : redirectUrl;
+        //값이 없을 때는 메인 페이지, 있으면 redirectUrl로 들어온 페이지로 이동
+
+        String script = String.format("parent.location.replace('%s');", request.getContextPath() + redirectUrl);
+
+        request.setAttribute("script", script);
+
         return "commons/execute_script";
     }
 }

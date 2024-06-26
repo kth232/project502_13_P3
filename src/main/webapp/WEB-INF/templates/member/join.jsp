@@ -12,7 +12,7 @@
         <form name="frmJoin" method="POST" action="${actionUrl}" autocomplete="off" target="ifrmProcess">
             <dl>
                 <dt>
-                    <fmt:message key='이메일' />
+                    <fmt:message key="이메일" />
                 </dt>
                 <dd>
                     <input type="text" name="email">
@@ -20,7 +20,7 @@
             </dl>
             <dl>
                 <dt>
-                    <fmt:message key='비밀번호'/>
+                    <fmt:message key="비밀번호"/>
                 </dt>
                 <dd>
                     <input type="password" name="password">
@@ -28,7 +28,7 @@
             </dl>
             <dl>
                 <dt>
-                    <fmt:message key='비밀번호_확인' />
+                    <fmt:message key="비밀번호_확인" />
                 </dt>
                 <dd>
                     <input type="password" name="confirmPassword">
@@ -36,7 +36,7 @@
             </dl>
             <dl>
                 <dt>
-                    <fmt:message key='회원명' />
+                    <fmt:message key="회원명" />
                 </dt>
                 <dd>
                     <input type="text" name="userName">
@@ -44,20 +44,20 @@
             </dl>
             <div class="terms">
                 <div class="tit">
-                    <fmt:message key='약관_동의' />
+                    <fmt:message key="약관_동의" />
                 </div>
                 <div class="termsContent">약관 내용..</div>
                 <input type="checkbox" name="termsAgree" value="true" id="termsAgree">
                 <label for="termsAgree">
-                    <fmt:message key='약관에_동의합니다' />
+                    <fmt:message key="약관에_동의합니다" />
                 </label>
             </div>
             <div class="button-group">
                 <button type="reset">
-                    <fmt:message key='다시_입력' />
+                    <fmt:message key="다시_입력" />
                 </button>
                 <button type="submit">
-                    <fmt:message key='가입하기' />
+                    <fmt:message key="가입하기" />
                 </button>
             </div>
         </form>

@@ -38,15 +38,15 @@
     </c:if>
 </head>
 <body>
-<header>
-    <jsp:invoke fragment="header" />
-</header>
-<main>
-    <jsp:doBody />
-</main>
-<footer>
-    <jsp:invoke fragment="footer" />
-</footer>
+    <header>
+        <jsp:invoke fragment="header" />
+    </header>
+    <main>
+        <jsp:doBody />
+    </main>
+    <footer>
+        <jsp:invoke fragment="footer" />
+    </footer>
 </body>
 <iframe name="ifrmProcess" class="dn"></iframe>
 </html>

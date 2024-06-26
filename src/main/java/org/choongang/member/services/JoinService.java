@@ -34,7 +34,7 @@ public class JoinService {
 
         int result = mapper.register(member);
         if(result < 1) {
-            throw new AlertException("회원가입에 실패하였습니다.", HttpServletResponse.SC_BAD_REQUEST);
+            throw new AlertException("회원가입에 실패하였습니다", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 }
