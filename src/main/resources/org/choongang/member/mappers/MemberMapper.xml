@@ -15,7 +15,7 @@
     <select id="get" resultMap="memberMap">
         SELECT * FROM MEMBER WHERE EMAIL=#{email}
     </select>
-    <select id="exists" resultMap="int">
+    <select id="exists" resultType="int">
         SELECT COUNT(*) FROM MEMBER WHERE EMAIL=#{email}
     </select>
     <insert id="register">
