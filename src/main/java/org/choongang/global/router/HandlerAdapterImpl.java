@@ -159,29 +159,39 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         /* 메서드 매개변수 의존성 주입 처리 E */
 
         /* 요청 메서드 호출 S */
-            // controller 적용 범위  Advice 처리
-            handlerControllerAdvice.handle(controller);
+        // controller 적용 범위 Advice 처리
+        boolean isContinue = handlerControllerAdvice.handle(controller);
+        if (!isContinue) { //컨트롤러 메서드 실행x
+            return;
+        }
 
-            Object result = method.invoke(controller, args.toArray());
+        Object result = method.invoke(controller, args.toArray());
 
-            /**
-             *  컨트롤러 타입이 @Controller이면 템플릿 출력,
-             * @RestController이면 JSON 문자열로 출력, 응답 헤더를 application/json; charset=UTF-8로 고정
-             */
-            boolean isRest = Arrays.stream(controller.getClass().getDeclaredAnnotations()).anyMatch(a -> a instanceof RestController);
-            // Rest 컨트롤러인 경우
-            if (isRest) {
-                response.setContentType("application/json; charset=UTF-8");
-                String json = om.writeValueAsString(result);
-                PrintWriter out = response.getWriter();
-                out.print(json);
-                return;
-            }
+        /**
+         *  컨트롤러 타입이 @Controller이면 템플릿 출력,
+         * @RestController이면 JSON 문자열로 출력, 응답 헤더를 application/json; charset=UTF-8로 고정
+         */
+        boolean isRest = Arrays.stream(controller.getClass().getDeclaredAnnotations()).anyMatch(a -> a instanceof RestController);
+        // Rest 컨트롤러인 경우
+        if (isRest) {
+            response.setContentType("application/json; charset=UTF-8");
+            String json = om.writeValueAsString(result);
+            PrintWriter out = response.getWriter();
+            out.print(json);
+            return;
+        }
+        //일반 컨트롤러인 경우 문자열이 redirect:로 시작하면 페이지 이동
+        String returnValue = (String) result;
+        if (returnValue.startsWith("redirect:")) {
+            String redirectUrl = returnValue.replace("redirect:", request.getContextPath());
+            response.sendRedirect(redirectUrl);
+            return;
+        }
 
-            // 일반 컨트롤러인 경우 문자열 반환값을 템플릿 경로로 사용
-            String tpl = "/WEB-INF/templates/" + result + ".jsp"; //반환값을 가지고 경로 자동 완성->버퍼에 추가
-            RequestDispatcher rd = request.getRequestDispatcher(tpl);
-            rd.forward(request, response);
+        // 일반 컨트롤러인 경우 문자열 반환값을 템플릿 경로로 사용
+        String tpl = "/WEB-INF/templates/" + result + ".jsp"; //반환값을 가지고 경로 자동 완성->버퍼에 추가
+        RequestDispatcher rd = request.getRequestDispatcher(tpl);
+        rd.forward(request, response);
 
         /* 요청 메서드 호출 E */
     }

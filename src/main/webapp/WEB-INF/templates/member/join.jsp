@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="layout" tagdir="/WEB-INF/tags/layouts" %>
-<fmt:setBundle basename="message.commons" />
+<fmt:setBundle basename="messages.commons" />
 <fmt:message var="pageTitle" key="회원가입" />
 <c:url var="actionUrl" value="/member/join" />
 
@@ -20,7 +20,7 @@
             </dl>
             <dl>
                 <dt>
-                    <fmt:message key="비밀번호"/>
+                    <fmt:message key="비밀번호" />
                 </dt>
                 <dd>
                     <input type="password" name="password">

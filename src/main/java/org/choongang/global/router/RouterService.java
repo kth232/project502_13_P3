@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.choongang.global.config.annotations.Service;
 import org.choongang.global.exceptions.ExceptionHandlerService;
+import org.choongang.global.exceptions.UnAuthorizedException;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +24,6 @@ public class RouterService {
 
     /**
      * 컨트롤러 라우팅
-     *
      */
     public void route(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         List<Object> data = null;
@@ -70,11 +70,16 @@ public class RouterService {
         } catch (Exception e) {
             req.setAttribute("message", e.getMessage());
             req.setAttribute("exception", e);
+            int status = 0;
             if (e instanceof ServletException || e instanceof IOException) {
-                int status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+            } else if (e instanceof UnAuthorizedException) {
+                status = HttpServletResponse.SC_UNAUTHORIZED; // 401
+            }
+            if (status >0){
                 res.setStatus(status);
                 req.setAttribute("status", status);
-                RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/templates/errors/500.jsp");
+                RequestDispatcher rd = req.getRequestDispatcher("/WEB-INF/templates/errors/" + status+ ".jsp");
                 rd.forward(req, res);
 
                 e.printStackTrace();
