@@ -9,7 +9,7 @@
 <c:url var="jsUrl" value="/js/" />
 <c:url var="homeUrl" value="/" />
 <c:url var="searchUrl" value="/board/search" />
-<c:url var="logoUrl" value="/images/book_logo1.jpg" />
+<c:url var="logoUrl" value="/images/book_logo11.png" />
 
 <layout:common title="${title}">
     <jsp:attribute name="header">
@@ -35,7 +35,12 @@
     </jsp:attribute>
     <jsp:attribute name="footer">
         <section class="layout-width inner">
-            메인 레이아웃 하단 영역!
+            <div class="bottom-bar">
+                포켓몬 도감 프로젝트
+            </div>>
+            <div class="bottom-bar2">
+                pokebook@pokemonkorea.co.kr
+            </div>
         </section>
     </jsp:attribute>
     <jsp:attribute name="commonCss">
