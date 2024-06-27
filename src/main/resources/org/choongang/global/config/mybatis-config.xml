@@ -14,6 +14,7 @@
     </properties>
     <typeHandlers>
         <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.choongang.member.constants.UserType" />
+        <typeHandler handler="org.apache.ibatis.type.EnumTypeHandler" javaType="org.choongang.board.constants.Authority" />
         <!--우리가 추가해준 enum은 직접 핸들러를 작성해 주어야 함-->
     </typeHandlers>
     <environments default="dev">
