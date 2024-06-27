@@ -1,4 +1,3 @@
-
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
@@ -15,6 +14,7 @@
 
     <insert id="register">
         INSERT INTO BOARD
+        (BID, BNAME, ROWS_PER_PAGE, ACTIVE, ACTIVE_CATEGORY, AUTHORITY)
         VALUES (#{bId}, #{bName}, #{rowsPerPage}, #{active}, #{activeCategory}, #{authority})
     </insert>
 
@@ -26,6 +26,9 @@
             </if>
             <if test="rowsPerPage > 0">
                 ROWS_PER_PAGE=#{rowsPerPage},
+            </if>
+            <if test="authority != null">
+                AUTHORITY=#{authority},
             </if>
             ACTIVE=#{active},
             ACTIVE_CATEGORY=#{activeCategory}
@@ -43,5 +46,9 @@
 
     <select id="getList" resultMap="boardMap">
         SELECT * FROM BOARD ORDER BY BID
+    </select>
+
+    <select id="exists" resultType="int">
+        SELECT COUNT(*) FROM BOARD WHERE BID=#{bId}
     </select>
 </mapper>
