@@ -14,6 +14,7 @@ import org.choongang.global.config.annotations.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
+
     private final BoardConfigInfoService configInfoService;
     private final HttpServletRequest request;
 
@@ -44,12 +45,13 @@ public class BoardController {
     }
 
     /**
-     * 모든 요청처리 메서드에 공통 처리 부분
-     * @param bId: 게시판 설정 유지/게시판 설정 x->게시판이 없음(BoardConfigNotFoundExceeption)
+     * 모든 요청 처리 메서드에 공통 처리 부분
+     *
+     * @param bId : 게시판 설정 유지 / 게시판 설정 X -> 게시판이 없음(BoardConfigNotFoundException)
      */
-    private void commonProcess(String bId){
+    private void commonProcess(String bId) {
         Board board = configInfoService.get(bId).orElseThrow(BoardConfigNotFoundException::new);
-        //람다식(사용자 정의-짧게 작성)
+
         request.setAttribute("board", board);
     }
 }

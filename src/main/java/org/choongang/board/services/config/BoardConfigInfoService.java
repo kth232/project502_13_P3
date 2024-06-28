@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor //의존성 주입
 public class BoardConfigInfoService {
     private final BoardMapper mapper;
+
     public Optional<Board> get(String bId) {
         Board board = mapper.get(bId);
         
