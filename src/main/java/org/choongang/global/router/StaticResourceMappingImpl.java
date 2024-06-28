@@ -31,7 +31,7 @@ public class StaticResourceMappingImpl implements StaticResourceMapping {
         // webapp/static 경로 및 파일 업로드 경로 조회
         File file = getStaticPath(request);
 
-        if (file.exists() && file.isFile()) { //파일일 때만 접근
+        if (file.exists() && file.isFile()) { //파일일 때만 접근하도록 제한함
             Path source = file.toPath();
             String contentType = Files.probeContentType(source);
             response.setContentType(contentType);
