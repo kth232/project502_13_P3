@@ -19,7 +19,5 @@
                 <button type="submit">글작성</button>
             </div>
         </form>
-
     </section>
-
 </layout:main>
