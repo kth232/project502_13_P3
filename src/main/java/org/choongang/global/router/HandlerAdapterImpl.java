@@ -72,7 +72,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                 for (String rUrl : rootUrls) {
                     String _url = request.getContextPath() + rUrl + url;
                     for (String s : matched) {
-                        _url = _url.replace("{" + s + "}", "(\\w*)"); //(\\w*) -> 그룹화: 일정 패턴에서 데이터를 뽑아낼 때 사용
+                        _url = _url.replace("{" + s + "}", "([^/]+)/?"); //(\\w*) -> 그룹화: 일정 패턴에서 데이터를 뽑아낼 때 사용
                     }
 
                     Pattern p2 = Pattern.compile("^" + _url+"$");
