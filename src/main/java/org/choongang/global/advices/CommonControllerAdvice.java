@@ -23,7 +23,8 @@ public class CommonControllerAdvice {
     public  boolean isAdmin() {
         return memberUtil.isAdmin();
     }
-    
+
+    @ModelAttribute
     public Member loggedMember() { //값을 전역에 유지함
         return memberUtil.getMember();
     }
