@@ -24,12 +24,16 @@
                     <td>${item.BId}</td>
                     <td>${item.BName}</td>
                     <td>
-                        <a href="<c:url value='/admin/board/update/${item.BId}' />">
-                            수정하기
-                        </a>
-                        <a href="<c:url value='/board/list/${item.BId}' />" target="_blank">
-                            게시글 목록
-                        </a>
+                        <button type="button">
+                            <a href="<c:url value='/admin/board/update/${item.BId}' />">
+                                수정하기
+                            </a>
+                        </button>
+                        <button type="button">
+                            <a href="<c:url value='/board/list/${item.BId}' />" target="_blank">
+                                게시글 목록
+                            </a>
+                        </button>
                     </td>
                 </tr>
             </c:forEach>

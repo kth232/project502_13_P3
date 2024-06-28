@@ -44,7 +44,7 @@ main > .side-menu a.on {
 /* 내용 영역 S */
 main > .main-content {
     flex-grow: 1;
-    background: #f8f8f8;
+    background: #E4F7BA;
     padding: 50px;
 }
 
@@ -143,6 +143,13 @@ nav.sub-menu a:hover {
     text-decoration: underline;
 }
 
+button {
+    border: 1px solid #ccc; /*옅은 회색*/
+    padding: 0 10px; /*좌우 패팅*/
+    height: 30px;
+    width: 100px;
+    background: #f8f8f8;
+}
 /* 테이블 공통 E */
 
 /* 메세지 박스 */
