@@ -9,7 +9,7 @@
         <tr>
             <th width='180'>게시판 ID</th>
             <th>게시판 이름</th>
-            <th width='250'></th>
+            <th width='250'>수정 및 게시글 보기</th>
         </tr>
         </thead>
         <tbody>
