@@ -298,6 +298,6 @@ public class HandlerAdapterImpl implements HandlerAdapter {
             return mapping.value();
         }
 
-        return null;
+        return new String[] {""};
     }
 }

@@ -91,8 +91,8 @@ public class HandlerMappingImpl implements HandlerMapping{
                     String addUrl = prefixUrl == null ? "" : prefixUrl;
                     // 메서드인 경우 *와 {경로변수} 고려하여 처리
                     for(String mapping : mappings) {
-                        String pattern = mapping.replace("/*", "/\\w*")
-                                .replaceAll("/\\{\\w+\\}", "/(\\\\w*)"); //그룹화
+                        String pattern = mapping.replace("/*", "/[^/]+/?") //*는 최소 매핑->값이 없어도 매핑되는 오류 발생
+                                .replaceAll("/\\{\\w+\\}", "/([^/]+)/?"); //그룹화
 
                         //패턴 바꿔줌
                         Pattern p = Pattern.compile("^" + request.getContextPath() + addUrl + pattern + "$");
