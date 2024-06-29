@@ -8,12 +8,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class Member { //DB에서 불러오는 데이터들
+public class Member {
     private long userNo;
     private String email;
     private String password;
     private String userName;
-    private UserType userType = UserType.USER; //관리자, 일반회원 구분
+    private UserType userType = UserType.USER;
+    private long myPokemonSeq;
     private LocalDateTime regDt;
     private LocalDateTime modDt;
 }

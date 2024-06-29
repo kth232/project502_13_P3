@@ -16,12 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class BeanContainer {
-    //객체 관리, 의존성 주입 역할
     private static BeanContainer instance;
 
     private Map<String, Object> beans;
 
-    private MapperProvider mapperProvider; //마이바티스 매퍼 조회
+    private MapperProvider mapperProvider; // 마이바티스 매퍼 조회
 
     public BeanContainer() {
         beans = new HashMap<>();
@@ -29,9 +28,9 @@ public class BeanContainer {
     }
 
     public void loadBeans() {
-        // 패키지 경로 기준으로 스캔 파일 경로 조회, 해당하는 의존성 연결해줌,
+        // 패키지 경로 기준으로 스캔 파일 경로 조회
         try {
-            String rootPath = new File(getClass().getResource("../../../").getPath()).getCanonicalPath(); //경로 기준: org.choongang
+            String rootPath = new File(getClass().getResource("../../../").getPath()).getCanonicalPath();
             String packageName = getClass().getPackageName().replace(".global.config.containers", "");
             List<Class> classNames = getClassNames(rootPath, packageName);
 
@@ -53,11 +52,10 @@ public class BeanContainer {
                  *      - HttpServletRequest
                  *      - HttpServletResponse
                  *      - HttpSession session
-                 *      - Mybatis mapper 구현 객체
                  */
 
-                if (beans.containsKey(key)) { //싱글톤
-                    updateObject(beans.get(key)); //요청이 들어올 때마다 매번 갱신해야하는 객체들은 업데이트
+                if (beans.containsKey(key)) {
+                    updateObject(beans.get(key));
                     continue;
                 }
 
@@ -65,7 +63,7 @@ public class BeanContainer {
                 Annotation[] annotations = clazz.getDeclaredAnnotations();
 
                 boolean isBean = false;
-                for (Annotation anno : annotations) { //해당 애노테이션이 붙으면 관리 객체->컨테이너 안에 담아줌
+                for (Annotation anno : annotations) {
                     if (anno instanceof Controller || anno instanceof RestController || anno instanceof Service || anno instanceof Component || anno instanceof ControllerAdvice || anno instanceof RestControllerAdvice)  {
                         isBean = true;
                         break;
@@ -73,17 +71,14 @@ public class BeanContainer {
                 }
                 // 컨테이너가 관리할 객체라면 생성자 매개변수의 의존성을 체크하고 의존성이 있다면 해당 객체를 생성하고 의존성을 해결한다.
                 if (isBean) {
-                    Constructor con = clazz.getDeclaredConstructors()[0]; //1개만 정의하도록 제한, 생성자가 2개면 어떤 건지 특정할 수 없기 때문
-                    List<Object> objs = resolveDependencies(key, con); //의존성의 의존성의 의존성인 경우
-                    if (!beans.containsKey(key)) { //이미 해결된 의존성이 있다면 생성하지 않고 추가(싱글톤 패턴)
+                    Constructor con = clazz.getDeclaredConstructors()[0];
+                    List<Object> objs = resolveDependencies(key, con);
+                    if (!beans.containsKey(key)) {
                         Object obj = con.getParameterTypes().length == 0 ? con.newInstance() : con.newInstance(objs.toArray());
                         beans.put(key, obj);
                     }
                 }
-
             }
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,6 +125,7 @@ public class BeanContainer {
     private List<Object> resolveDependencies(String key, Constructor con) throws Exception {
         List<Object> dependencies = new ArrayList<>();
         if (beans.containsKey(key)) {
+            updateObject(beans.get(key));
             dependencies.add(beans.get(key));
             return dependencies;
         }
@@ -141,9 +137,9 @@ public class BeanContainer {
         } else {
             for(Class clazz : parameters) {
                 /**
-                 * 인터페이스라면 마이바티스 매퍼일 수 있으므로 매퍼로 조회가 되는지 체크합니다.
+                 * 인터페이스라면 마이바티스 매퍼일수 있으므로 매퍼로 조회가 되는지 체크합니다.
                  * 매퍼로 생성이 된다면 의존성 주입이 될 수 있도록 dependencies에 추가
-                 * 마이바티스 매퍼는 싱글톤 x, 매번 새로 만들어야 함!
+                 *
                  */
                 if (clazz.isInterface()) {
                     Object mapper = mapperProvider.getMapper(clazz);
@@ -154,12 +150,12 @@ public class BeanContainer {
                 }
 
                 Object obj = beans.get(clazz.getName());
-                if (obj == null) { //존재하지 않을 때 만들어줌
+                if (obj == null) {
                     Constructor _con = clazz.getDeclaredConstructors()[0];
 
                     if (_con.getParameterTypes().length == 0) {
                         obj = _con.newInstance();
-                    } else { //재귀적으로 체크해서 의존성 주입(싱글톤으로 재활용)
+                    } else {
                         List<Object> deps = resolveDependencies(clazz.getName(), _con);
                         obj = _con.newInstance(deps.toArray());
                     }
@@ -179,7 +175,7 @@ public class BeanContainer {
             String path = file.getAbsolutePath();
             String className = packageName + "." + path.replace(rootPath + File.separator, "").replace(".class", "").replace(File.separator, ".");
             try {
-                Class cls = Class.forName(className); //파일 경로를 가지고 클래스 객체 생성
+                Class cls = Class.forName(className);
                 classes.add(cls);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -189,8 +185,8 @@ public class BeanContainer {
     }
 
     private List<File> getFiles(String rootPath) {
-        List<File> items = new ArrayList<>(); //파일 객체 형태로 가져옴
-        File[] files = new File(rootPath).listFiles(); //경로 기준으로 재귀적 호출
+        List<File> items = new ArrayList<>();
+        File[] files = new File(rootPath).listFiles();
         if (files == null) return items;
 
         for (File file : files) {
@@ -214,7 +210,7 @@ public class BeanContainer {
      *
      * @param bean
      */
-    private void updateObject(Object bean) {
+    private void updateObject(Object bean) throws Exception {
         // 인터페이스인 경우 갱신 배제
         if (bean.getClass().isInterface()) {
             return;
@@ -244,9 +240,8 @@ public class BeanContainer {
                     field.set(bean, getBean(HttpServletResponse.class));
                 } else if (clz == HttpSession.class) {
                     field.set(bean, getBean(HttpSession.class));
-                } else if (mapper != null) { // 마이바티스 매퍼
-                    field.set(bean, mapper);
                 }
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
