@@ -13,12 +13,12 @@ import org.choongang.member.entities.Member;
 @ControllerAdvice("org.choongang") //중앙 하위 패키지가 접근 범위(모든 페이지에서 공통으로 적용할 내용 정의)
 public class CommonControllerAdvice {
     private final MemberUtil memberUtil;
-    
+
     @ModelAttribute
     public boolean isLogin() { //메서드명이 속성명이 되어 동작, 모든 컨트롤러 범위 해당
         return memberUtil.isLogin(); //속성값 유지
     }
-    
+
     @ModelAttribute //공통 속성 값
     public  boolean isAdmin() {
         return memberUtil.isAdmin();
@@ -27,6 +27,11 @@ public class CommonControllerAdvice {
     @ModelAttribute
     public Member loggedMember() { //값을 전역에 유지함
         return memberUtil.getMember();
+    }
+
+    @ModelAttribute
+    public PokemonDetail myProfile() {
+        return memberUtil.getMyProfile();
     }
 
     /*

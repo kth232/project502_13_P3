@@ -15,20 +15,20 @@ import org.choongang.member.MemberUtil;
 @RequiredArgsConstructor
 public class BoardSaveValidator implements Validator<RequestBoardData>, RequiredValidator {
 
-    private final MemberUtil memberUtil; //로그인 유무 체크
+    private final MemberUtil memberUtil;
     private final BoardDataMapper mapper;
 
     @Override
     public void check(RequestBoardData form) {
         /**
-         * 1. 필수 항목 검증
-         * poster, subject, content
-         * bId, gId ->게시글 등록 시 게시글 수정 시에는 변경x
-         * seq ->게시글 수정시 필수(게시글 번호)
-         *     -> 게시글 수정 시 게시글이 조회되는지
+         * 필수 항목 검증
+         *      poster, subject, content
+         *      bId, gId - 게시글 등록시, 게시글 수정시에는 변경 X
+         *      seq - 게시글 수정시 필수(게시글 번호)
+         *          - 게시글 수정시 게시글이 조회 되는지
          *
-         * 미로그인 시 필수 -questPassword ->비회원 비밀번호
-         *                              ->비밀번호 자리수 4자리 이상
+         *      미로그인 시 필수 - guestPassword - 비회원 비밀번호
+         *                                    - 비밀번호 자리수 4자리 이상
          */
 
         String mode = form.getMode();

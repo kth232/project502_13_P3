@@ -1,4 +1,3 @@
-
 package org.choongang.mypage.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +25,9 @@ public class MypageController {
      */
     @GetMapping
     public String index() {
+
         request.setAttribute("addScript", List.of("mypage/profile"));
+
         return "mypage/index";
     }
 
@@ -37,6 +38,9 @@ public class MypageController {
      */
     @GetMapping("/info")
     public String info() {
+
+        request.setAttribute("addScript", List.of("mypage/profile", "mypage/info"));
+
         return "mypage/info";
     }
 
@@ -46,9 +50,10 @@ public class MypageController {
      */
     @PostMapping("/info")
     public String infoPs(RequestProfile form) {
+
         profileService.update(form);
+
         String url = request.getContextPath() + "/mypage";
-        //정보 수정이 완료되면 마이페이지 화면으로 돌아가서 수정 정보 확인할 수 있게 함
         String script = String.format("parent.location.replace('%s');", url);
 
         request.setAttribute("script", script);

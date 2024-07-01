@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.choongang.global.advices.HandlerControllerAdvice;
 import org.choongang.global.config.annotations.*;
 import org.choongang.global.config.containers.BeanContainer;
@@ -35,7 +36,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
     }
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response, List<Object> data) throws Exception{ //컨트롤러와 매개변수 주입->동적 실행(reflect API)
+    public void execute(HttpServletRequest request, HttpServletResponse response, List<Object> data) throws Exception {
 
         Object controller = data.get(0); // 컨트롤러 객체
         Method method = (Method)data.get(1); // 찾은 요청 메서드
@@ -72,14 +73,14 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                 for (String rUrl : rootUrls) {
                     String _url = request.getContextPath() + rUrl + url;
                     for (String s : matched) {
-                        _url = _url.replace("{" + s + "}", "([^/]+)/?"); //(\\w*) -> 그룹화: 일정 패턴에서 데이터를 뽑아낼 때 사용
+                        _url = _url.replace("{" + s + "}", "([^/]+)/?");
                     }
 
                     Pattern p2 = Pattern.compile("^" + _url+"$");
                     Matcher matcher2 = p2.matcher(request.getRequestURI());
                     while (matcher2.find()) {
                         for (int i = 0; i < matched.size(); i++) {
-                            pathVariables.put(matched.get(i), matcher2.group(i + 1)); //경로 변수 유입
+                            pathVariables.put(matched.get(i), matcher2.group(i + 1));
                         }
                     }
                 }
@@ -91,7 +92,6 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         /* 메서드 매개변수 의존성 주입 처리 S */
         List<Object> args = new ArrayList<>();
         for (Parameter param : method.getParameters()) {
-
             Class cls = param.getType();
             String paramValue = null;
             for (Annotation pa : param.getDeclaredAnnotations()) {
@@ -106,17 +106,18 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                 }
             }
 
-            //숫자->값이 없으면 0으로
             if (cls == int.class || cls == Integer.class || cls == long.class || cls == Long.class || cls == double.class || cls == Double.class ||  cls == float.class || cls == Float.class) {
                 paramValue = paramValue == null || paramValue.isBlank()?"0":paramValue;
             }
 
-            if (cls == HttpServletRequest.class) { //기본 객체 주입
+            if (cls == HttpServletRequest.class) {
                 args.add(request);
             } else if (cls == HttpServletResponse.class) {
                 args.add(response);
+            } else if (cls == HttpSession.class) {
+                args.add(BeanContainer.getInstance().getBean(HttpSession.class));
             } else if (cls == int.class) {
-                args.add(Integer.parseInt(paramValue)); //형변환도 자동으로 해줌
+                args.add(Integer.parseInt(paramValue));
             } else if (cls == Integer.class) {
                 args.add(Integer.valueOf(paramValue));
             } else if (cls == long.class) {
@@ -140,7 +141,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
                 Object paramObj = cls.getDeclaredConstructors()[0].newInstance();
                 for (Method _method : cls.getDeclaredMethods()) {
                     String name = _method.getName();
-                    if (!name.startsWith("set")) continue; //setter 함수가 아니면 건너뛰기
+                    if (!name.startsWith("set")) continue;
 
                     char[] chars = name.replace("set", "").toCharArray();
                     chars[0] = Character.toLowerCase(chars[0]);
@@ -151,7 +152,7 @@ public class HandlerAdapterImpl implements HandlerAdapter {
 
                     Class clz = _method.getParameterTypes()[0];
                     // 자료형 변환 후 메서드 호출 처리
-                    invokeMethod(paramObj,_method, value, clz, name); //메서드 동적 호출
+                    invokeMethod(paramObj,_method, value, clz, name);
                 }
                 args.add(paramObj);
             } // endif
@@ -159,9 +160,10 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         /* 메서드 매개변수 의존성 주입 처리 E */
 
         /* 요청 메서드 호출 S */
-        // controller 적용 범위 Advice 처리
+
+        // controller 적용 범위  Advice 처리
         boolean isContinue = handlerControllerAdvice.handle(controller);
-        if (!isContinue) { //컨트롤러 메서드 실행x
+        if (!isContinue) { // 컨트롤러 메서드 실행 X
             return;
         }
 
@@ -180,8 +182,9 @@ public class HandlerAdapterImpl implements HandlerAdapter {
             out.print(json);
             return;
         }
-        //일반 컨트롤러인 경우 문자열이 redirect:로 시작하면 페이지 이동
-        String returnValue = (String) result;
+
+        // 일반 컨트롤러인 경우 문자열이 redirect:로 시작하면 페이지 이동
+        String returnValue = (String)result;
         if (returnValue.startsWith("redirect:")) {
             String redirectUrl = returnValue.replace("redirect:", request.getContextPath());
             response.sendRedirect(redirectUrl);
@@ -189,10 +192,9 @@ public class HandlerAdapterImpl implements HandlerAdapter {
         }
 
         // 일반 컨트롤러인 경우 문자열 반환값을 템플릿 경로로 사용
-        String tpl = "/WEB-INF/templates/" + result + ".jsp"; //반환값을 가지고 경로 자동 완성->버퍼에 추가
+        String tpl = "/WEB-INF/templates/" + result + ".jsp";
         RequestDispatcher rd = request.getRequestDispatcher(tpl);
         rd.forward(request, response);
-
         /* 요청 메서드 호출 E */
     }
 
@@ -205,7 +207,6 @@ public class HandlerAdapterImpl implements HandlerAdapter {
      * @param clz
      * @param fieldNm - 멤버변수명
      */
-    //형변환을 위해 class 클래스 필요
     private void invokeMethod(Object paramObj, Method method, String value, Class clz, String fieldNm) {
         try {
             if (clz == String.class) { // 문자열 처리

@@ -11,12 +11,12 @@ import java.util.List;
 @Data
 @Builder
 public class Board {
-    private String bId; //게시파 아이디
-    private String bName; //게시판 이름
-    private int rowsPerPage; //1페이지 행 수
-    private int active; //사용 여부
-    private int activeCategory; //분류 사용 여부
-    private String category; //분류
+    private String bId; // 게시판 아이디
+    private String bName; // 게시판 이름
+    private int rowsPerPage; // 1페이지 행 수
+    private int active; // 사용 여부
+    private int activeCategory; // 분류 사용 여부
+    private String category; // 분류
     private Authority authority;
 
     // 분류 목록
@@ -25,6 +25,7 @@ public class Board {
 
             List<String> categories = Arrays.stream(category.trim().split("\\n"))
                     .map(s -> s.replace("\\r", ""))
+                    .map(s -> s.replace("\\n", ""))
                     .toList();
 
             return categories;

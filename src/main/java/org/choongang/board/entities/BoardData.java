@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@NoArgsConstructor //modelmapper 사용 위한 기본 생성자
+@NoArgsConstructor
 @AllArgsConstructor
 public class BoardData {
     private long num;
