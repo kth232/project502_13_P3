@@ -1,3 +1,4 @@
+
 package org.choongang.mypage.validators;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ public class ProfileUpdateValidator implements Validator<RequestProfile>, Requir
     @Override
     public void check(RequestProfile form) {
 
-        // 로그인 여부 체크
+        // 로그인 여부 체크 
         checkTrue(memberUtil.isLogin(), new UnAuthorizedException());
 
         String userName = form.getUserName();
