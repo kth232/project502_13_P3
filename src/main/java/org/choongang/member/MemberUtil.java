@@ -32,6 +32,10 @@ public class MemberUtil {
      */
     public Member getMember() {
         HttpSession session = BeanContainer.getInstance().getBean(HttpSession.class);
+        if(session == null){
+            return null; //테스트를 위한 임시처방
+        }
+        
         Member member = (Member)session.getAttribute("member");
 
         return member;

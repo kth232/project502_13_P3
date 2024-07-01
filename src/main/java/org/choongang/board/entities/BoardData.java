@@ -1,12 +1,16 @@
 package org.choongang.board.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
 @Builder
+@NoArgsConstructor //modelmapper 사용 위한 기본 생성자
+@AllArgsConstructor
 public class BoardData {
     private long num;
     private long seq;

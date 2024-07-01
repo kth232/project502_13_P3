@@ -71,8 +71,6 @@
     </select>
 
     <select id="getList" resultMap="boardDataMap">
-
-
         SELECT * FROM (
         SELECT ROWNUM NUM, B.*, M.EMAIL, M.USER_NAME FROM BOARD_DATA B
         LEFT JOIN MEMBER M ON M.SEQ = B.MEMBER_SEQ
@@ -104,5 +102,9 @@
         <![CDATA[
         D.NUM >= #{offset} AND D.NUM < #{endRows}
         ]]>
+    </select>
+
+    <select id="exists" resultType="int">
+        SELECT COUNT(*) FROM BOARD_DATA WHERE SEQ=#{seq}
     </select>
 </mapper>
