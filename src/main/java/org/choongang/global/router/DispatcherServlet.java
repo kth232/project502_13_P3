@@ -11,15 +11,20 @@ import jakarta.servlet.http.HttpSession;
 import org.choongang.global.config.containers.BeanContainer;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/")
 public class DispatcherServlet extends HttpServlet  {
-    //모든 서비스 요청 유입, 컨테이너 생성, 라우트로 전달
+
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
         BeanContainer bc = BeanContainer.getInstance();
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+
+        if (check(request)) {
+            bc.setLoaded(false);
+        }
 
         bc.addBean(HttpServletRequest.class.getName(), request);
         bc.addBean(HttpServletResponse.class.getName(), response);
@@ -27,7 +32,24 @@ public class DispatcherServlet extends HttpServlet  {
 
         bc.loadBeans();
 
+        if (check(request)) {
+            bc.setLoaded(true);
+        }
+
         RouterService service = bc.getBean(RouterService.class);
         service.route(request, response);
+    }
+
+    /**
+     * css, js, image 파일 요청이 아닌지 체크
+     *
+     * @param request
+     * @return
+     */
+    private boolean check(HttpServletRequest request) {
+        String uri = request.getRequestURI().toLowerCase();
+        List<String> excludeExtensions = List.of(".css", ".js", ".png", ".jpg", ".jpeg", ".gif");
+
+        return excludeExtensions.stream().noneMatch(s -> uri.endsWith(s));
     }
 }
