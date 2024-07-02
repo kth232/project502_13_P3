@@ -8,6 +8,7 @@ import org.choongang.global.config.annotations.ModelAttribute;
 import org.choongang.global.exceptions.*;
 import org.choongang.member.MemberUtil;
 import org.choongang.member.entities.Member;
+import org.choongang.pokemon.entities.PokemonDetail;
 
 @RequiredArgsConstructor
 @ControllerAdvice("org.choongang") //중앙 하위 패키지가 접근 범위(모든 페이지에서 공통으로 적용할 내용 정의)
