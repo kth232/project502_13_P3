@@ -1,4 +1,3 @@
-
 package org.choongang.pokemon.api.tests;
 
 import org.junit.jupiter.api.DisplayName;
