@@ -10,7 +10,7 @@
 <c:url var="jsUrl" value="/js/" />
 <c:url var="homeUrl" value="/" />
 <c:url var="searchUrl" value="/board/search" />
-<c:url var="logoUrl" value="/images/logo.jpg" />
+<c:url var="logoUrl" value="/images/logo.png" />
 
 <layout:common title="${title}">
     <jsp:attribute name="header">
@@ -34,6 +34,9 @@
                         </a>
                     </util:guestOnly>
                     <util:memberOnly>
+                        <c:if test="${myProfile != null}">
+                            <img src="${myProfile.frontImage}" width="50">
+                        </c:if>
                         <fmt:message key="LOGIN_MSG">
                             <fmt:param>${loggedMember.userName}</fmt:param>
                             <fmt:param>${loggedMember.email}</fmt:param>
@@ -64,7 +67,7 @@
                 </div>
                 <div class="right">
                     <form class="search-box" method="GET" action="${searchUrl}" autocomplete="off">
-                        <input type="text" name="keyword" placeholder="<fmt:message key='검색어를_입력하세요' />">
+                        <input type="text" name="keyword" placeholder="<fmt:message key='검색어를_입력하세요.' />">
                         <button type="submit">
                             <i class="xi-search"></i>
                         </button>
@@ -74,7 +77,7 @@
         </section>
         <nav>
             <div class="layout-width inner">
-                <a href="#">메뉴1</a>
+                <a href="<c:url value='/pokemon/game' />">포켓몬 게임</a>
                 <a href="#">메뉴2</a>
                 <a href="#">메뉴3</a>
                 <a href="#">메뉴4</a>

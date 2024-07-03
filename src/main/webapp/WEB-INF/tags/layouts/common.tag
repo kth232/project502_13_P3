@@ -15,6 +15,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="rootUrl" content="<c:url value='/' />">
     <title>
         <c:if test="${!empty title}">
             ${title} -
@@ -30,6 +31,7 @@
         </c:forEach>
     </c:if>
 
+    <script src="${jsUrl}layer.js"></script>
     <script src="${jsUrl}common.js"></script>
     <jsp:invoke fragment="commonJs" />
     <c:if test="${addScript != null}">
@@ -39,15 +41,15 @@
     </c:if>
 </head>
 <body>
-    <header>
-        <jsp:invoke fragment="header" />
-    </header>
-    <main>
-        <jsp:doBody />
-    </main>
-    <footer>
-        <jsp:invoke fragment="footer" />
-    </footer>
+<header>
+    <jsp:invoke fragment="header" />
+</header>
+<main>
+    <jsp:doBody />
+</main>
+<footer>
+    <jsp:invoke fragment="footer" />
+</footer>
 </body>
 <iframe name="ifrmProcess" class="dn"></iframe>
 </html>
